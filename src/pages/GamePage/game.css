@@ -176,7 +176,7 @@
       /* 背景透明 */
 }
 .lucky-bag {
-  width: 80px;
+  width: 70px;
     height: 80px;
   background-image: url('/image/big-bag.png');
   background-size: contain;
@@ -216,4 +216,42 @@
   to {
     left: 40px;
   }
+}
+
+.grab-btn{
+    background-color: red;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%; /* 圓形按鈕 */
+  width: 100px;  /* 按鈕寬度 */
+  height: 100px; /* 按鈕高度，與寬度相同以保持圓形 */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2), 0px 2px 5px rgba(0, 0, 0, 0.1); /* 初始陰影 */
+  transition: transform 0.1s ease, box-shadow 0.1s ease; /* 過渡效果 */
+}
+
+.grab-btn:hover {
+  transform: translateY(-4px); /* 鼠標懸停時稍微上升 */
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3), 0px 4px 10px rgba(0, 0, 0, 0.1); /* 增強陰影 */
+}
+
+.grab-btn:active {
+  transform: translateY(2px); /* 按下時稍微下降 */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2), 0px 1px 3px rgba(0, 0, 0, 0.1); /* 陰影變弱 */
+}
+
+.grab-btn.disabled {
+  background-color: #b0bec5; /* 灰色背景 */
+  color: #78909c; /* 灰色文字 */
+  cursor: not-allowed; /* 禁止點擊的光標 */
+  box-shadow: none; /* 禁用時不顯示陰影 */
+}
+
+.grab-btn:disabled {
+  transform: none; /* 禁用時沒有動畫效果 */
 }

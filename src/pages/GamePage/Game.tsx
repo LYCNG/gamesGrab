@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import "./game.css";
 
@@ -15,25 +15,25 @@ interface RewardType {
 const Game = () => {
   const [bags, setBags] = useState<RewardType[]>([]);
 
-  const [angle, setAngle] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [angle, setAngle] = useState(0); //搖擺角度
+  const [direction, setDirection] = useState(1); //搖擺方向 1:向右，-1:向左
+
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [lineLength, setLineLength] = useState(0);
-  const hookRef = useRef<HTMLDivElement>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
-
   const [collection, setCollection] = useState({
     checkGrab: false,
     position: { x: 0, y: 0 },
   });
 
+  const [winning, setWinning] = useState(false);
+
   useEffect(() => {
     // 持續生成物件，每隔 1 秒生成一個
     if (playing) {
       const generateInterval = setInterval(() => {
-        setBags((prev) => [...prev, { id: Date.now() }]);
-      }, 500);
+        setBags((prev) => [...prev, { id: prev.length + 1 }]);
+      }, 1500);
 
       return () => clearInterval(generateInterval);
     }
@@ -54,45 +54,33 @@ const Game = () => {
   }, [direction, playing, isGrabbing]);
 
   const checkCollision = () => {
-    const { x, width } = hookRef.current?.getBoundingClientRect() || {
-      x: 0,
-      wdith: 0,
-    };
-    const { x: boxX, width: boxWidth } =
-      boxRef.current?.getBoundingClientRect() || {
-        boxX: 0,
-        boxWidth: 0,
-      };
-    if (width && boxWidth) {
-      const line = 160;
-      const radians = angle * (Math.PI / 180);
-      const endX = Math.sin(radians) * line + 240;
-      console.log(endX);
-      const endY = 0 + Math.cos(radians) * line + 50;
-      setCollection({ checkGrab: false, position: { x: endX, y: endY } });
-    }
+    const radians = -angle * (Math.PI / 180);
+    const endX = Math.sin(radians) * 380 + 200;
+    setCollection({ checkGrab: true, position: { x: endX, y: 220 } });
   };
 
-  const handleGrab = () => {
+  const onGrabCallback = useCallback(() => {
     if (!isGrabbing && playing) {
       setIsGrabbing(true);
-
       // 延伸動畫
       const extendInterval = setInterval(() => {
         setLineLength((prev) => {
           if (prev >= 160) {
             // 最大延伸長度
+            checkCollision();
             clearInterval(extendInterval);
-
             // 延遲後開始收回
             setTimeout(() => {
               const retractInterval = setInterval(() => {
+                if (winning) {
+                  // 如果抓到了，停止收回動畫並保留當前位置
+                  clearInterval(retractInterval);
+                  return; // 退出該動畫過程
+                }
                 setLineLength((prev) => {
                   if (prev <= 0) {
-                    checkCollision();
                     clearInterval(retractInterval);
                     setIsGrabbing(false);
-
                     return 0;
                   }
                   return prev - 5;
@@ -101,33 +89,36 @@ const Game = () => {
             }, 500); // 延伸到最長後等待500ms
             return prev;
           }
-          return prev + 5;
+          return prev + 10;
         });
       }, 20);
     }
-  };
+  }, [ isGrabbing, playing, winning]);
 
   const handleRemove = (id: number) => {
     setBags((prev) => prev.filter((bag) => bag.id !== id));
   };
 
+  const handleCatch = (id: number) => {
+    console.log("catch", id);
+    setWinning(true);
+    setIsGrabbing(false);
+    setCollection({ ...collection, checkGrab: false });
+  };
+
+  useEffect(() => {
+    if (winning) {
+      setIsGrabbing(false);
+      setPlaying(false);
+
+    }
+  }, [winning]);
+
   return (
     <div className="game-container">
       <div className="title" />
-      <div className="box" ref={boxRef}>
+      <div className="box">
         <div
-          style={{
-            background: "black",
-            position: "absolute",
-            top: collection.position.y,
-            left: collection.position.x,
-            width: 10,
-            height: 10,
-            zIndex: 9999,
-          }}
-        ></div>
-        <div
-          ref={hookRef}
           id="hook"
           style={{
             transform: `translateX(-50%) rotate(${angle}deg)`,
@@ -148,7 +139,9 @@ const Game = () => {
             <Reward
               key={bag.id}
               id={bag.id}
+              isPause={!playing}
               onRemove={handleRemove}
+              onCatch={handleCatch}
               {...collection}
             />
           ))}
@@ -165,7 +158,7 @@ const Game = () => {
         }}
       >
         {playing ? (
-          <button onClick={handleGrab} disabled={!playing || isGrabbing}>
+          <button onClick={onGrabCallback } disabled={isGrabbing} className="grab-btn">
             Grab
           </button>
         ) : (

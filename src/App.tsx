@@ -1,5 +1,6 @@
 
 
+import { Route, Routes } from "react-router-dom";
 import Game from "./pages/GamePage/Game";
 
 
@@ -14,7 +15,13 @@ function App() {
         alignItems: "center",
       }}
     >
-      <Game />
+     
+        <Routes>
+        <Route path="/" element={<Game />} />
+        <Route path="/game" element={<Game />} />
+
+        </Routes>
+  
     </div>
   );
 }
