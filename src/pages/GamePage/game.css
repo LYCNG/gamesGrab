@@ -37,7 +37,7 @@
   height: 400px; /* 根據實際 box 圖片高度調整 */
   margin: 20px auto 0;
   background-image: url("/image/box.png");
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
@@ -47,6 +47,7 @@
   width: 80%;
   height: 80px;
   top: 100px;
+    display: none;
   position: absolute;
   bottom: 20px; /* 距離底部 20px */
   left: 50%;
@@ -59,6 +60,7 @@
 }
 
 .track2 {
+  display: inline;
   width: 80%;
   height: 100px;
   position: absolute;
@@ -151,8 +153,31 @@
   }
 }
 
-.lucky-bag {
 
+.play-btn{
+    width: 300px;
+      /* 固定按鈕的寬度 */
+      height: 70px;
+      /* 固定按鈕的高度 */
+      background-image: url('/image/start.png');
+      /* 替換為您的圖片路徑 */
+      background-size: contain;
+      /* 確保圖片完整顯示 */
+      background-repeat: no-repeat;
+      /* 防止重複 */
+      background-position: center;
+      border: none;
+      /* 移除按鈕邊框 */
+      cursor: pointer;
+      /* 滑鼠變為手形 */
+      outline: none;
+      /* 移除點擊時的外框 */
+      background-color: transparent;
+      /* 背景透明 */
+}
+.lucky-bag {
+  width: 80px;
+    height: 80px;
   background-image: url('/image/big-bag.png');
   background-size: contain;
   background-repeat: no-repeat;

@@ -1,25 +1,41 @@
-import React from 'react'
-import { RewardType } from '../../../types';
+import { motion } from "framer-motion";
+import React, { useEffect } from "react";
 
-
-
-
-
-const Reward: React.FC<RewardType> = ({  track, delay }) => {
-
-    const bagStyle = {
-        position: 'absolute',
-        left: `${track === 1 ? 40 : 360}px`,
-        top: `${track === 1 ? 140 : 260}px`,
-        width: track === 1 ? '50px' : '80px',
-        height: track === 1 ? '50px' : '80px',
-        zIndex: 999,
-        animation: track === 1 ? 'moveLeft 3s infinite' : 'moveRight 3s infinite',
-        animationDelay: `${delay}s` // 添加延遲
-  } as React.CSSProperties;
-
-    
-  return <div className={`lucky-bag ${track === 1 ? 'behind' : 'front'}`} style={bagStyle} />;
+interface MovingObjectProps {
+  id: number;
+  onRemove: (id: number) => void;
+  checkGrab: boolean;
+  position: { x: number; y: number };
 }
 
-export default Reward
+const Reward: React.FC<MovingObjectProps> = ({
+  id,
+  onRemove,
+  checkGrab,
+  position,
+}) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onRemove(id);
+    }, 5000); // 自動移除超出邊界的物件時間
+
+    return () => clearTimeout(timeout);
+  }, [id, onRemove]);
+
+  useEffect(() => {
+    if (checkGrab) {
+      console.log("checkGrab", position);
+    }
+  }, [checkGrab]);
+  return (
+    <motion.div
+      className="lucky-bag"
+      initial={{ x: -50, top: 172 }} // 物件生成位置高度設定在 300px
+      animate={{ x: window.innerWidth }} // 物件向右移動
+      transition={{ duration: 6, ease: "linear" }}
+      style={{ position: "absolute" }}
+    />
+  );
+};
+
+export default Reward;
