@@ -1,37 +1,13 @@
-import { useState } from "react";
 
-import { GameCanvas } from "./GameCanvas";
-import "./admin.css";
 
-function App() {
-  const [isGrabbing, setIsGrabbing] = useState(false);
-  const [playing, setPlaying] = useState(false);
-
-  const handleGrab = () => {
-    if (!isGrabbing) {
-      setIsGrabbing(true);
-    }
-  };
-
+export const Admin = () => {
   return (
-    <div className="App">
-      <h1>夾娃娃遊戲</h1>
-      <GameCanvas
-        isGrabbing={isGrabbing}
-        setIsGrabbing={setIsGrabbing}
-        playing={playing}
-        setPlaying={setPlaying}
-      />
-      <button
-        className="grab-button"
-        onClick={handleGrab}
-        disabled={isGrabbing}
-      >
-        抓取
-      </button>
-      <button onClick={() => setPlaying(true)}>開始遊戲</button>
+    <div
+    className='w-[100px] h-[100px] bg-red-500 border-2 border-black ' 
+    >Admin 1234
+    <button className='w-[100px] h-[100px] bg-blue-500 border-2 border-black'>
+      123
+    </button>
     </div>
-  );
+  )
 }
-
-export default App;

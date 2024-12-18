@@ -1,161 +1,51 @@
-.game-container {
-  background-image: url("/image/bg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 400px; /* iPhone 12 Pro 寬度 */
-  height: 844px; /* iPhone 12 Pro 高度 */
-  margin: 0 auto; /* 水平置中 */
-  position: relative;
-  overflow: hidden; /* 防止內容溢出 */
+.App {
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    background-image: url("/image/bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
 }
 
-/* 確保容器在較小的螢幕上也能完整顯示 */
-@media (max-height: 844px) {
-  .game-container {
-    height: 100vh;
-  }
+.grab-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #e93e2f;
+    border: none;
+    border-radius: 100px;
+    color: white;
+    width: 80px;
+    height: 80px;
 }
 
-.title {
-  width: 100%;
-  height: 180px; /* 根據實際 title 圖片高度調整 */
-  margin: 20px auto 0;
-  background-image: url("/image/title.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: absolute;
-  z-index: 3;
+.grab-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
-.box {
-  position: absolute;
-  z-index: 1;
-  top: 140px;
-  width: 100%;
-  height: 400px; /* 根據實際 box 圖片高度調整 */
-  margin: 20px auto 0;
-  background-image: url("/image/box.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: hidden;
+canvas {
+    background-color: white;
 }
 
-.track1 {
-  width: 80%;
-  height: 80px;
-  top: 100px;
-    display: none;
-  position: absolute;
-  bottom: 20px; /* 距離底部 20px */
-  left: 50%;
-  transform: translateX(-50%); /* 水平置中 */
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat; /* 新增：推到底部 */
-  background-image: url("/image/behind.png");
-   
+.game-title {
+    width: 100%;
+    height: 180px;
+    left: 0;
+    top: 0;
+    background-image: url("/image/title.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: 3;
 }
 
-.track2 {
-  display: inline;
-  width: 80%;
-  height: 100px;
-  position: absolute;
-  top: 200px;
-  bottom: 20px; /* 距離底部 20px */
-  left: 50%;
-  transform: translateX(-50%); /* 水平置中 */
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat; /* 新增：推到底部 */
-  background-image: url("/image/front.png");
-
-}
-
-
-.list {
-  width: 90%;
-  height: 200px;
-  position: absolute; /* 改為 absolute 定位 */
-  bottom: 20px; /* 距離底部 20px */
-  left: 50%;
-  transform: translateX(-50%); /* 水平置中 */
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat; /* 新增：推到底部 */
-
-  background-image: url("/image/rect.png");
-}
-
-#hook {
-  position: absolute;
-  top:-140px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  z-index: 99;
-  transform-origin: top center; /* 設定旋轉中心點在最上方中間 */
-}
-
-
-.line {
-  width: auto;
-  height: 200px; /* 調整繩子長度 */
-  background-image: url('/image/line.png');
-  background-size: 100% 100%;
-  background-repeat: repeat-y;
-  position: relative;
-  z-index: 99;
-}
-
-.left {
-  position: absolute;
-  bottom: -40px; /* 調整位置 */
-  left: -20px; /* 調整位置 */
-  width: 60px;
-  height: 60px;
-  z-index: 98;
-  background-image: url('/image/left.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.right {
-  position: absolute;
-  bottom: -40px; /* 調整位置 */
-  right: -50px; /* 調整位置 */
-  width: 60px;
-  height: 60px;
-  z-index: 98;
-  background-image: url('/image/right.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-@keyframes swing {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(15deg); /* 向右擺動 */
-  }
-  50% {
-    transform: rotate(0deg); /* 回到原位 */
-  }
-  75% {
-    transform: rotate(-15deg); /* 向左擺動 */
-  }
-  100% {
-    transform: rotate(0deg); /* 回到原位 */
-  }
-}
-
-
-.play-btn{
-    width: 300px;
+.start-button {
+     width: 300px;
       /* 固定按鈕的寬度 */
       height: 70px;
       /* 固定按鈕的高度 */
@@ -175,83 +65,4 @@
       background-color: transparent;
       /* 背景透明 */
 }
-.lucky-bag {
-  width: 70px;
-    height: 80px;
-  background-image: url('/image/big-bag.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  transform: translateY(-100%); /* 讓福袋坐在軌道上 */
 
-}
-
-.lucky-bag.behind {
-  top: 140px;
-  left: 40px;
-    width: 50px;
-  height: 50px;
-}
-
-.lucky-bag.front {
-  top: 260px;
-   right: 40px; /* 右邊框位置 */
-    width: 80px;
-  height: 80px;
-}
-
-
-@keyframes moveRight{
-  from {
-    left: 40px;
-  }
-  to {
-    left: 360px;
-  }
-}
-
-@keyframes moveLeft {
- from {
-    left: 360px;
-  }
-  to {
-    left: 40px;
-  }
-}
-
-.grab-btn{
-    background-color: red;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%; /* 圓形按鈕 */
-  width: 100px;  /* 按鈕寬度 */
-  height: 100px; /* 按鈕高度，與寬度相同以保持圓形 */
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2), 0px 2px 5px rgba(0, 0, 0, 0.1); /* 初始陰影 */
-  transition: transform 0.1s ease, box-shadow 0.1s ease; /* 過渡效果 */
-}
-
-.grab-btn:hover {
-  transform: translateY(-4px); /* 鼠標懸停時稍微上升 */
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3), 0px 4px 10px rgba(0, 0, 0, 0.1); /* 增強陰影 */
-}
-
-.grab-btn:active {
-  transform: translateY(2px); /* 按下時稍微下降 */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2), 0px 1px 3px rgba(0, 0, 0, 0.1); /* 陰影變弱 */
-}
-
-.grab-btn.disabled {
-  background-color: #b0bec5; /* 灰色背景 */
-  color: #78909c; /* 灰色文字 */
-  cursor: not-allowed; /* 禁止點擊的光標 */
-  box-shadow: none; /* 禁用時不顯示陰影 */
-}
-
-.grab-btn:disabled {
-  transform: none; /* 禁用時沒有動畫效果 */
-}
