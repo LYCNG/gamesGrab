@@ -93,7 +93,7 @@ const Game = () => {
         });
       }, 20);
     }
-  }, [ isGrabbing, playing, winning]);
+  }, [isGrabbing, playing, winning]);
 
   const handleRemove = (id: number) => {
     setBags((prev) => prev.filter((bag) => bag.id !== id));
@@ -110,7 +110,6 @@ const Game = () => {
     if (winning) {
       setIsGrabbing(false);
       setPlaying(false);
-
     }
   }, [winning]);
 
@@ -158,7 +157,11 @@ const Game = () => {
         }}
       >
         {playing ? (
-          <button onClick={onGrabCallback } disabled={isGrabbing} className="grab-btn">
+          <button
+            onClick={onGrabCallback}
+            disabled={isGrabbing}
+            className="grab-btn"
+          >
             Grab
           </button>
         ) : (
