@@ -25,7 +25,7 @@ export const UserLogin = () => {
   };
   return (
     <div
-      className="min-h-screen flex items-center justify-center w-full"
+      className="min-h-screen flex items-center justify-center w-full p-6 "
       style={{
         backgroundImage: 'url("/image/bg.png")',
         backgroundSize: "cover",
@@ -33,15 +33,15 @@ export const UserLogin = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="bg-white/20  shadow-md rounded-lg px-8 py-6 max-w-md backdrop-blur-sm">
-        <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">
+      <div className="bg-white/20 text-black shadow-md rounded-lg px-8 py-6 max-w-md backdrop-blur-sm">
+        <h1 className="text-2xl font-bold text-center mb-4 ">
           歡迎來參加抽獎小遊戲
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="account"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-black  mb-2"
             >
               {labelConfig.account}
             </label>
@@ -58,7 +58,7 @@ export const UserLogin = () => {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-blackmb-2"
             >
               {labelConfig.password}
             </label>

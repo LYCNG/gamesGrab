@@ -6,13 +6,8 @@ import { UserLogin } from "./pages/UserLoginPage/UserLogin";
 
 function App() {
   return (
-    <div className="fixed inset-0 flex justify-center items-center w-screen h-screen bg-black">
-      <div
-        className="relative w-full h-full max-w-[400px] max-h-[844px] overflow-hidden"
-        style={{
-          aspectRatio: "400/844",
-        }}
-      >
+    <div className="fixed inset-0 flex justify-center items-center w-screen h-screen ">
+      <div>
         <Routes>
           <Route path="/" element={<Game />} />
           <Route path="/login" element={<UserLogin />} />

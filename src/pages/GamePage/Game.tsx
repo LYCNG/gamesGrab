@@ -26,7 +26,10 @@ const Game = () => {
     return <Navigate to="/login" />;
   }
   return (
-    <div className="game-page">
+    <div className="game-page relative w-full h-full max-w-[400px] max-h-[844px] overflow-hidden"
+        style={{
+          aspectRatio: "400/844",
+        }}>
       <BurgerMenu />
       <div className="game-title"></div>
       <GameCanvas
