@@ -12,7 +12,7 @@ const prizes = [
 
 const PrizeList = () => {
   return (
-    <div style={{ padding: "10px", paddingTop: "50px" }}>
+    <div>
       <div className="carousel-container">
         <motion.div
           className="carousel-track"

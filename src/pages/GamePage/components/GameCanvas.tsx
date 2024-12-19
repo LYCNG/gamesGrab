@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 // 可控參數區域 - 可以根據需求調整這些值
-const GAME_CONFIG = {
+export const GAME_CONFIG = {
   // Canvas 尺寸
   CANVAS_WIDTH: 375,
   CANVAS_HEIGHT: 500,
@@ -17,7 +17,7 @@ const GAME_CONFIG = {
     SWING_ANGLE_MIN: -115,
     SWING_ANGLE_MAX: -65,
     INITIAL_ANGLE: -90,
-    OFFSET_Y: 30,  // 添加垂直偏移量
+    OFFSET_Y: 30, // 添加垂直偏移量
   },
 
   // 禮物配置
@@ -58,7 +58,7 @@ interface GameCanvasProps {
   setIsGrabbing: (isGrabbing: boolean) => void;
   playing: boolean;
   setPlaying: (playing: boolean) => void;
-  winningCallback:()=>void
+  winningCallback: () => void;
 }
 
 const loadImage = (src: string): Promise<HTMLImageElement> => {
@@ -75,12 +75,16 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
   setIsGrabbing,
   playing,
   setPlaying,
-  winningCallback
+  winningCallback,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestIdRef = useRef<number>();
   const loadedImages = useRef<{ [key: string]: HTMLImageElement }>({});
-  const EXTEND_LIMIT = GAME_CONFIG.CANVAS_HEIGHT - GAME_CONFIG.CLAW.LENGTH - GAME_CONFIG.PRIZE.BASE_HEIGHT - 90;
+  const EXTEND_LIMIT =
+    GAME_CONFIG.CANVAS_HEIGHT -
+    GAME_CONFIG.CLAW.LENGTH -
+    GAME_CONFIG.PRIZE.BASE_HEIGHT -
+    90;
 
   const gameState = useRef({
     clawX: GAME_CONFIG.CANVAS_WIDTH / 2,
@@ -113,11 +117,16 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
     let lastTime = 0;
 
     const generatePrize = () => {
-      const offsetX = (GAME_CONFIG.PRIZE.DISPLAY.WIDTH - GAME_CONFIG.PRIZE.COLLISION.WIDTH) / 2;
-      const offsetY = (GAME_CONFIG.PRIZE.DISPLAY.HEIGHT - GAME_CONFIG.PRIZE.COLLISION.HEIGHT) / 2;
-      
+      const offsetX =
+        (GAME_CONFIG.PRIZE.DISPLAY.WIDTH - GAME_CONFIG.PRIZE.COLLISION.WIDTH) /
+        2;
+      const offsetY =
+        (GAME_CONFIG.PRIZE.DISPLAY.HEIGHT -
+          GAME_CONFIG.PRIZE.COLLISION.HEIGHT) /
+        2;
+
       gameState.current.prizes.push({
-        x: -GAME_CONFIG.PRIZE.DISPLAY.WIDTH + offsetX+50,
+        x: -GAME_CONFIG.PRIZE.DISPLAY.WIDTH + offsetX + 50,
         y:
           GAME_CONFIG.CANVAS_HEIGHT -
           GAME_CONFIG.FOOTER_HEIGHT -
@@ -147,9 +156,15 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
 
     const drawPrizes = () => {
       gameState.current.prizes.forEach((prize) => {
-        const offsetX = (GAME_CONFIG.PRIZE.DISPLAY.WIDTH - GAME_CONFIG.PRIZE.COLLISION.WIDTH) / 2;
-        const offsetY = (GAME_CONFIG.PRIZE.DISPLAY.HEIGHT - GAME_CONFIG.PRIZE.COLLISION.HEIGHT) / 2;
-        
+        const offsetX =
+          (GAME_CONFIG.PRIZE.DISPLAY.WIDTH -
+            GAME_CONFIG.PRIZE.COLLISION.WIDTH) /
+          2;
+        const offsetY =
+          (GAME_CONFIG.PRIZE.DISPLAY.HEIGHT -
+            GAME_CONFIG.PRIZE.COLLISION.HEIGHT) /
+          2;
+
         // 繪製獎品圖片
         ctx.drawImage(
           loadedImages.current.prize,
@@ -160,7 +175,6 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         );
 
         // 繪製碰撞區域（調試用）
-   
       });
 
       gameState.current.prizes = gameState.current.prizes.filter(
@@ -173,17 +187,17 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
       const adjustedAngle = ((state.clawSwingAngle - 180) * Math.PI) / 180;
 
       // 計算爪子實際位置，加入垂直偏移
-      const clawTipX = 
-        state.clawX + 
-        (GAME_CONFIG.CLAW.LENGTH - GAME_CONFIG.CLAW.OFFSET_Y) * Math.cos(adjustedAngle);
-      const clawTipY = 
-        state.clawY + 
-        (GAME_CONFIG.CLAW.LENGTH - GAME_CONFIG.CLAW.OFFSET_Y) * Math.sin(adjustedAngle);
+      const clawTipX =
+        state.clawX +
+        (GAME_CONFIG.CLAW.LENGTH - GAME_CONFIG.CLAW.OFFSET_Y) *
+          Math.cos(adjustedAngle);
+      const clawTipY =
+        state.clawY +
+        (GAME_CONFIG.CLAW.LENGTH - GAME_CONFIG.CLAW.OFFSET_Y) *
+          Math.sin(adjustedAngle);
 
       if (state.clawY >= EXTEND_LIMIT - GAME_CONFIG.CLAW.OFFSET_Y) {
         // 計算爪子碰撞箱
- 
-   
 
         let caught = false;
         gameState.current.prizes = gameState.current.prizes.filter((prize) => {
@@ -204,11 +218,13 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           // 使用更精確的距離判斷，調整判定範圍
-          const minDistance = (GAME_CONFIG.CLAW.HEAD_WIDTH + GAME_CONFIG.PRIZE.COLLISION.WIDTH) / 3;
+          const minDistance =
+            (GAME_CONFIG.CLAW.HEAD_WIDTH + GAME_CONFIG.PRIZE.COLLISION.WIDTH) /
+            3;
           const collision = distance < minDistance;
 
           // 繪製禮物碰撞區域（調試用）
-         
+
           if (collision && !caught && state.clawExtending) {
             caught = true;
             prize.caught = true;
@@ -219,7 +235,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         });
 
         if (caught) {
-          winningCallback()
+          winningCallback();
           state.clawExtending = false;
           state.clawRetracting = true;
           alert("恭喜中獎！");
@@ -380,7 +396,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
       ref={canvasRef}
       width={GAME_CONFIG.CANVAS_WIDTH}
       height={GAME_CONFIG.CANVAS_HEIGHT}
-        style={{ background: 'transparent' }}  // 添加這行
+      style={{ background: "transparent" }} // 添加這行
     />
   );
 };

@@ -1,13 +1,17 @@
-
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 
 export const Admin = () => {
+  const { user } = useAuth();
+
+  // 如果不是管理員，導向遊戲頁面
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/game" />;
+  }
+
   return (
-    <div
-    className='w-[100px] h-[100px] bg-red-500 border-2 border-black ' 
-    >Admin 1234
-    <button className='w-[100px] h-[100px] bg-blue-500 border-2 border-black'>
-      123
-    </button>
+    <div>
+      <h1>Admin</h1>
     </div>
-  )
-}
+  );
+};

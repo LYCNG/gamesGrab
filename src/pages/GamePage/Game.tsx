@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { GameCanvas } from "./components/GameCanvas";
-import "./game.css";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
+import { BurgerMenu } from "./components/BurgerMenu";
+import { GAME_CONFIG, GameCanvas } from "./components/GameCanvas";
 import PrizeList from "./components/PrizeList";
-
-
+import "./game.css";
 
 const Game = () => {
-  
-   const [isGrabbing, setIsGrabbing] = useState(false);
+  const { user } = useAuth();
+  const [isGrabbing, setIsGrabbing] = useState(false);
   const [playing, setPlaying] = useState(false);
 
   const handleGrab = () => {
@@ -16,12 +17,17 @@ const Game = () => {
     }
   };
 
-  const winningCallback = () => { 
-    setPlaying(false)
-    setIsGrabbing(false)
+  const winningCallback = () => {
+    setPlaying(false);
+    setIsGrabbing(false);
+  };
+
+  if (!user) {
+    return <Navigate to="/login" />;
   }
   return (
-    <div className="App">
+    <div className="game-page">
+      <BurgerMenu />
       <div className="game-title"></div>
       <GameCanvas
         isGrabbing={isGrabbing}
@@ -31,20 +37,22 @@ const Game = () => {
         winningCallback={winningCallback}
       />
 
-       <div
+      <div
         style={{
-          border: "0px solid red",
-          zIndex: 100,
+          zIndex: 10,
           display: "flex",
           justifyContent: "center",
           position: "absolute",
-          bottom: "300px",
+          top: GAME_CONFIG.CANVAS_HEIGHT - 40,
           left: "0",
           right: "0",
         }}
       >
         {!playing && (
-          <button onClick={() => setPlaying(!playing)} className="start-button" />
+          <button
+            onClick={() => setPlaying(!playing)}
+            className="start-button"
+          />
         )}
         {playing && (
           <button
@@ -56,7 +64,11 @@ const Game = () => {
           </button>
         )}
       </div>
-      <PrizeList />
+      <div className="absolute bottom-20 left-0 right-0 p-6">
+        <PrizeList />
+      </div>
+
+      <div>{user.point}</div>
     </div>
   );
 };
