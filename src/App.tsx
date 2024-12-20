@@ -6,15 +6,13 @@ import { UserLogin } from "./pages/UserLoginPage/UserLogin";
 
 function App() {
   return (
-    <div className="fixed inset-0 flex justify-center items-center w-screen h-screen ">
-      <div>
-        <Routes>
-          <Route path="/" element={<Game />} />
-          <Route path="/login" element={<UserLogin />} />
-          <Route path="/game" element={<Game />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </div>
+    <div className="inset-0 flex justify-center items-center w-screen h-screen ">
+      <Routes>
+        <Route path="/" element={<Game />} />
+        <Route path="/login" element={<UserLogin />} />
+        <Route path="/game" element={<Game />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
     </div>
   );
 }

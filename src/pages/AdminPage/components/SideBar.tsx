@@ -1,61 +1,116 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { 
-  MdDashboard,
-  MdPeople,
-  MdInventory,
-  MdArticle,
-  MdLogin 
-} from 'react-icons/md';
-import type { IconType } from 'react-icons';
+import { FaUser } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthProvider";
 
-interface MenuItem {
-  icon: IconType;
-  label: string;
-  path: string;
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (collapsed: boolean) => void;
 }
 
-const menuItems: MenuItem[] = [
-  { icon: MdDashboard, label: 'Dashboard', path: '/admin' },
-  { icon: MdPeople, label: 'User', path: '/admin/user' },
-  { icon: MdInventory, label: 'Product', path: '/admin/product' },
-  { icon: MdArticle, label: 'Blog', path: '/admin/blog' },
-  { icon: MdLogin, label: 'Sign in', path: '/admin/signin' },
-];
+export const Sidebar: React.FC<SidebarProps> = ({
+  isCollapsed,
+  setIsCollapsed,
+}) => {
+  const navigate = useNavigate();
+  const { logout, user } = useAuth();
 
-export const Sidebar: React.FC = () => {
-  const location = useLocation();
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const menuItem = [
+    {
+      name: "使用者管理",
+    },
+    {
+      name: "遊戲設定",
+    },
+    {
+      name: "獎品管理",
+    },
+  ];
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
-      {/* Logo Section */}
-      <div className="p-6">
-        <div className="flex items-center space-x-3">
-         
-          <span className="font-semibold">Admin View</span>
+    <>
+      {/* Mobile Backdrop - 只在手機/平板顯示 */}
+      <div
+        onClick={() => setIsCollapsed(true)}
+        className={`
+          fixed inset-0 bg-black/50 z-40 transition-opacity duration-500
+          lg:hidden
+          ${isCollapsed ? "hidden" : "block"}
+        `}
+      />
+
+      {/* Sidebar */}
+      <div
+        className={`
+          fixed top-0 left-0 h-screen bg-white flex flex-col shadow-lg
+          transition-all duration-300 
+          z-50
+          lg:relative lg:translate-x-0 lg:w-64
+          ${isCollapsed ? "-translate-x-full" : "translate-x-0 w-[280px]"}
+        `}
+      >
+        {/* Toggle Button - Desktop Only */}
+
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-gray-200 ">
+          <div
+            className={`flex items-center ${
+              isCollapsed ? "justify-center" : "justify-start"
+            }`}
+          >
+            <span className={`text-xl font-bold `}>Admin</span>
+          </div>
+        </div>
+
+        {/* Menu Items */}
+        <div className="flex-1 overflow-y-auto">
+          {menuItem.map((item, index) => (
+            <button
+              key={index}
+              className={`w-full px-4 py-3 flex items-center hover:bg-gray-100 transition-colors
+              gap-4
+            `}
+            >
+              <FaUser className="text-gray-500 text-xl" />
+              <span>{item.name}</span>
+            </button>
+          ))}
+
+          {/* Add more menu items here */}
+        </div>
+
+        {/* User Info and Logout */}
+        <div className="border-t border-gray-200">
+          {/* User Info */}
+          <div className={`px-4 py-3 flex items-center gap-4`}>
+            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+              <FaUser className="text-gray-500" />
+            </div>
+            <div className={`flex-1 `}>
+              <p className="text-sm font-medium text-gray-900">
+                {user?.username}
+              </p>
+              <p className="text-xs text-gray-500">管理員</p>
+            </div>
+          </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className={`w-full px-4 py-3 text-red-600 hover:bg-gray-100 flex items-center transition-colors
+            gap-6
+            `}
+          >
+            <FiLogOut className="text-lg" />
+            <span>登出系統</span>
+          </button>
         </div>
       </div>
-
-      {/* Navigation */}
-      <nav className="mt-6">
-        {menuItems.map((item, index) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.path;
-          
-          return (
-            <Link
-              key={index}
-              to={item.path}
-              className={`flex items-center px-6 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors ${
-                isActive ? 'bg-blue-50 text-blue-600' : ''
-              }`}
-            >
-              <Icon className="w-5 h-5 mr-3" />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+    </>
   );
 };
