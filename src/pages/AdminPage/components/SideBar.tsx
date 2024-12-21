@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div
         onClick={() => setIsCollapsed(true)}
         className={`
-          fixed inset-0 bg-black/50 z-40 transition-opacity duration-500
+          fixed inset-0 bg-black/50 z-40 transition-opacity duration-500 h-screen
           lg:hidden
           ${isCollapsed ? "hidden" : "block"}
         `}
