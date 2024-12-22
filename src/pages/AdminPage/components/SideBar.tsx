@@ -6,11 +6,15 @@ import { useAuth } from "../../../context/AuthProvider";
 interface SidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   setIsCollapsed,
+  activeTab,
+  setActiveTab,
 }) => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
@@ -23,12 +27,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItem = [
     {
       name: "使用者管理",
+      id: "user",
     },
     {
-      name: "遊戲設定",
+      name: "禮包管理",
+      id: "gift",
     },
     {
-      name: "獎品管理",
+      name: "付款紀錄",
+      id: "payment",
+    },
+    {
+      name: "商品管理",
+      id: "product",
     },
   ];
 
@@ -63,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               isCollapsed ? "justify-center" : "justify-start"
             }`}
           >
-            <span className={`text-xl font-bold `}>Admin</span>
+            <span className={`text-xl font-bold `}>Admin </span>
           </div>
         </div>
 
@@ -72,7 +83,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {menuItem.map((item, index) => (
             <button
               key={index}
-              className={`w-full px-4 py-3 flex items-center hover:bg-gray-100 transition-colors
+              onClick={() => setActiveTab(item.id)}
+              style={{backgroundColor: activeTab === item.id ? "#f0f0f0" : ""}}
+              className={`w-full px-4 py-3 flex items-center hover:bg-gray-100 transition-colors 
               gap-4
             `}
             >

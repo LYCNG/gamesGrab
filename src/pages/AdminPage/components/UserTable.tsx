@@ -8,7 +8,7 @@ import {
  SortingState,
 } from '@tanstack/react-table';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
-import { mockData } from '../mock';
+import { mockData } from '../../../mock';
 
 export interface User {
     id: string;

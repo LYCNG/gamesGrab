@@ -3,7 +3,7 @@ import {  MdAdd } from 'react-icons/md';
 import { GiftFormModal } from './GiftFromModal';
 import { Gift } from '../../../types/gift';
 import { GiftCard } from './GiftCard';
-import { mockGifts } from '../mock';
+import { mockGifts } from '../../../mock';
 
 
 

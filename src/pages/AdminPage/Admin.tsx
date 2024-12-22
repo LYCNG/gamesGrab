@@ -1,19 +1,40 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { Sidebar } from "./components/SideBar";
 import UserList from "./components/UserList";
 import { GiftList } from "./components/GiftList";
-import PaymentList from "./components/PaymentList";
+import { PaymentList } from "./components/PaymentList";
+import { ProductList } from "./components/ProductList";
 
 export const Admin = () => {
   const { user } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [activeTab, setActiveTab] = useState("user");
 
+
+
+    const renderContent = useCallback(() => {
+    switch (activeTab) {
+      case "user":
+        return <UserList />;
+      case "gift":
+        return <GiftList />;
+      case "payment":
+        return <PaymentList />;
+      case "product":
+        return <ProductList />;
+      default:
+          return <UserList />;
+    }
+    }, [activeTab]);
+  
   if (!user || user.role !== "admin") {
     return <Navigate to="/game" />;
   }
+
+
 
   return (
     <div className="max-h-screen bg-gray-50 w-full">
@@ -28,7 +49,7 @@ export const Admin = () => {
       <div className="flex">
         {/* Sidebar */}
      
-              <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+              <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} setActiveTab={setActiveTab} activeTab={activeTab}/>
    
 
         {/* Main Content */}
@@ -41,15 +62,10 @@ export const Admin = () => {
               <h2 className="text-lg font-semibold mb-4">Dashboard Content</h2>
               <p>Your dashboard content goes here</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm h-[500px]">
-              <UserList />
+            <div className="bg-white p-6 rounded-xl shadow-sm h-[800px]">
+              {renderContent()}
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm h-[500px]">
-              <GiftList />
-            </div>
-             <div className="bg-white p-6 rounded-xl shadow-sm h-[500px]">
-              <PaymentList />
-            </div>
+    
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
-import { Gift } from "../../../types/gift";
-import { Payment } from "../../../types/payment";
-import { User } from "../components/UserTable";
+import { Gift } from "../types/gift";
+import { Payment } from "../types/payment";
+import { User } from "../pages/AdminPage/components/UserTable";
+import { Product } from "../types/Product";
 
 export const mockGifts: Gift[] = [
  {
@@ -48,4 +49,19 @@ export const mockData: User[] = [
    phone: '555-555-5555',
    status: 'inactive',
  },
+];
+
+export const mockProducts: Product[] = [
+ {
+   id: '1',
+   name: 'Gaming Mouse',
+   price: 1500,
+   description: 'High performance gaming mouse with RGB lighting',
+   imageUrl: '/images/mouse.jpg',
+   stock: 50,
+   status: 'active',
+   createdAt: '2024-03-15T10:30:00Z',
+   updatedAt: '2024-03-15T10:30:00Z',
+ },
+ // ... 更多模擬數據
 ];
