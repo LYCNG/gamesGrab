@@ -1,4 +1,4 @@
-import { FaUser } from "react-icons/fa";
+import { FaGift, FaMoneyBill, FaShoppingBag, FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
@@ -28,18 +28,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       name: "使用者管理",
       id: "user",
+      icon:<FaUser />
     },
     {
       name: "禮包管理",
       id: "gift",
+      icon:<FaGift />
     },
     {
       name: "付款紀錄",
       id: "payment",
+      icon:<FaMoneyBill />
     },
     {
       name: "商品管理",
       id: "product",
+      icon:<FaShoppingBag />
     },
   ];
 
@@ -89,7 +93,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               gap-4
             `}
             >
-              <FaUser className="text-gray-500 text-xl" />
+              <div className="text-gray-500 text-xl">
+                {item.icon}
+              </div>
+          
               <span>{item.name}</span>
             </button>
           ))}
