@@ -1,36 +1,20 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { RoleType, User } from "../types/user";
+import { User } from "../types/user";
+import { api } from "../api";
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   user: User | null;
   login: (
     account: string,
     password: string
-  ) => { success: boolean; redirectTo: string };
+  ) => void
   logout: () => void;
   updatePoint: (newPoint: number) => void;
   error: string | null;
 }
 
-interface LoginCredentials {
-  account: string;
-  password: string;
-  role: RoleType;
-}
-
-// 預設使用者資料
-const DEFAULT_USERS: LoginCredentials[] = [
-  {
-    account: "admin",
-    password: "admin",
-    role: "admin",
-  },
-  {
-    account: "user",
-    password: "user",
-    role: "user",
-  },
-];
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -38,40 +22,65 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+
+
+const postLogin = async (data: {
+  account: string,
+  password: string
+}) => {
+  return await api.post('/auth/login', data);
+};
+
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = localStorage.getItem("local-user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
+
   const [error, setError] = useState<string | null>(null);
 
-  const login = (account: string, password: string) => {
+  const login = async (account: string, password: string)=> {
     setError(null);
+    try {
 
-    const matchedUser = DEFAULT_USERS.find(
-      (u) => u.account === account && u.password === password
-    );
-
-    if (matchedUser) {
-      const userData: User = {
-        userId: matchedUser.role === "admin" ? "admin-1" : "user-1",
-        username: matchedUser.role === "admin" ? "Administrator" : "User",
-        point: 10,
-        role: matchedUser.role as RoleType,
-      };
-
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      return {
-        success: true,
-        redirectTo: matchedUser.role === "admin" ? "/admin" : "/game",
-      };
-    } else {
-      setError("帳號或密碼錯誤");
-      return {
-        success: false,
-        redirectTo: "/login",
-      };
+      const res = await postLogin({ account, password });
+      const resData = await res.data;
+      if (resData.status === 200) {
+        const {data}= resData
+        const userData = {
+          userId: data.id,
+          username: data.user,
+          point: 10,
+          role:data.role
+        }
+        setUser(userData);
+        localStorage.setItem('local-user', JSON.stringify(userData));
+        localStorage.setItem('local-token',data.token);
+        enqueueSnackbar('Login Success', {
+          variant: 'success',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'center'
+          },
+        });
+        navigate('/');
+        return true;
+      } 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const errorMessage = err instanceof Error
+        ? err.message
+        : 'Login failed';
+      enqueueSnackbar(errorMessage, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'center'
+        }
+      });
+       return false
     }
   };
 

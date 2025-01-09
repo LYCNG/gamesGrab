@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
 const labelConfig = {
@@ -12,16 +11,14 @@ const labelConfig = {
 
 export const UserLogin = () => {
   const { login, error } = useAuth();
-  const navigate = useNavigate();
+
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result = login(account, password);
-    if (result.success) {
-      navigate(result.redirectTo);
-    }
+    return login(account, password);
+
   };
   return (
     <div

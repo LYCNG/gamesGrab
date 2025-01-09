@@ -8,56 +8,79 @@ import {
  SortingState,
 } from '@tanstack/react-table';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
-import { mockData } from '../../../mock';
+import { MdDelete, MdEdit } from 'react-icons/md';
+
 
 export interface User {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    status: 'active' | 'inactive';
+  account: string;
+  created: null | string;
+  id: string
+  role:'admin'|'role',
+  username:string
 };
 
 const columnHelper = createColumnHelper<User>();
 
-export const UserTable: React.FC = () => {
-   const isMobile = useMediaQuery('(max-width: 768px)');
+interface UserTablePropsType{
+  userList: User[];
+  onEdit: (user:User) => void;
+  onDelete: (user:User) => void;
+};
+
+export const UserTable: React.FC<UserTablePropsType> = ({ userList,onDelete,onEdit }) => {
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
  const [sorting, setSorting] = React.useState<SortingState>([]);
   const columns = useMemo(
-   () => [
-     columnHelper.accessor('name', {
+    () => [
+     columnHelper.accessor('username', {
        header: 'NAME',
        cell: (info) => (
          <div className="font-medium text-gray-900">{info.getValue()}</div>
        ),
      }),
-     columnHelper.accessor('email', {
-       header: 'EMAIL',
-       cell: (info) => <div className="text-gray-500">{info.getValue()}</div>,
-     }),
-     columnHelper.accessor('phone', {
-       header: 'PHONE',
-       cell: (info) => <div className="text-gray-500">{info.getValue()}</div>,
-     }),
-     columnHelper.accessor('status', {
-       header: 'STATUS',
+      columnHelper.accessor('account', {
+       header: 'Account',
        cell: (info) => (
-         <span
-           className={`px-3 py-1 rounded-full text-xs font-medium ${
-             info.getValue() === 'active'
-               ? 'bg-green-100 text-green-800'
-               : 'bg-red-100 text-red-800'
-           }`}
-         >
-           {info.getValue()}
-         </span>
+         <div className="font-medium text-gray-900">{info.getValue()}</div>
+       ),
+     }),
+     columnHelper.accessor('role', {
+       header: 'Role',
+       cell: (info) => <div className="text-gray-500">{info.getValue()}</div>,
+     }),
+      columnHelper.accessor('created', {
+            header: 'Created',
+       cell: (info) => <div className="text-gray-500">{info.getValue()}</div>,
+      }),
+       columnHelper.display({
+       id: 'actions',
+       header: 'Actions',
+       cell: (info) => (
+         <div className="flex space-x-2">
+           <button
+             onClick={() => onEdit(info.row.original)}
+             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+             title="Edit"
+           >
+             <MdEdit className="w-5 h-5" />
+           </button>
+           <button
+             onClick={() => onDelete(info.row.original)}
+             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+             title="Delete"
+           >
+             <MdDelete className="w-5 h-5" />
+           </button>
+         </div>
        ),
      }),
    ],
    []
  );
   const table = useReactTable({
-   data: mockData,
+   data: userList,
    columns,
    state: {
      sorting,
@@ -74,7 +97,7 @@ export const UserTable: React.FC = () => {
            {row.getVisibleCells().map((cell) => (
              <div key={cell.id} className="flex justify-between py-2 border-b last:border-0">
                <span className="font-medium text-gray-500">
-                 {cell.column.columnDef.header as string}
+                 {cell.column.columnDef.header as string}:
                </span>
                <span>
                  {flexRender(cell.column.columnDef.cell, cell.getContext())}

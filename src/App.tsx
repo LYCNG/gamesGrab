@@ -4,7 +4,10 @@ import { Admin } from "./pages/AdminPage/Admin";
 import Game from "./pages/GamePage/Game";
 import { UserLogin } from "./pages/UserLoginPage/UserLogin";
 
+
+
 function App() {
+
   return (
     <div className="inset-0 flex justify-center items-center w-screen h-screen ">
       <Routes>

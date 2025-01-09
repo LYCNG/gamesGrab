@@ -13,8 +13,6 @@ export const Admin = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState("user");
 
-
-
     const renderContent = useCallback(() => {
     switch (activeTab) {
       case "user":
@@ -33,7 +31,6 @@ export const Admin = () => {
   if (!user || user.role !== "admin") {
     return <Navigate to="/game" />;
   }
-
 
 
   return (

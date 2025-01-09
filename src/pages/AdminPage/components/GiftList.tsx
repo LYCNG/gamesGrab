@@ -20,7 +20,7 @@ export const GiftList: React.FC = () => {
    // 處理刪除邏輯
  };
   return (
-   <div className="space-y-4">
+   <div className="">
      {/* Header */}
      <div className="flex justify-between items-center">
        <h2 className="text-xl font-semibold">禮包管理</h2>

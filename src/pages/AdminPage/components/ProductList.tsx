@@ -11,6 +11,7 @@ export const ProductList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
     setIsModalOpen(true);
